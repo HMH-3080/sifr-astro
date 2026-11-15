@@ -1,0 +1,46 @@
+---
+const rackSvg = `<svg class="rack-svg" viewBox="0 0 240 300" fill="none" aria-hidden="true">
+  <g stroke="#c6cfd9">
+    <rect x="52" y="16" width="136" height="248" rx="7" stroke-opacity=".55"/>
+    <rect x="57" y="21" width="126" height="238" rx="4" stroke-opacity=".16"/>
+    <g stroke-opacity=".34">
+      <rect x="66" y="34" width="108" height="32" rx="3"/>
+      <rect x="66" y="76" width="108" height="32" rx="3"/>
+      <rect x="66" y="118" width="108" height="32" rx="3"/>
+      <rect x="66" y="160" width="108" height="32" rx="3"/>
+      <rect x="66" y="202" width="108" height="32" rx="3"/>
+    </g>
+  </g>
+  <g fill="#dbe4ee">
+    <circle cx="77" cy="50" r="2.3"/><circle cx="77" cy="92" r="2.3"/><circle cx="77" cy="134" r="2.3"/><circle cx="77" cy="176" r="2.3"/><circle cx="77" cy="218" r="2.3"/>
+  </g>
+  <g stroke="#c6cfd9" stroke-opacity=".45" stroke-linecap="round">
+    <path d="M88 50h56M88 92h38M88 134h62M88 176h32M88 218h50"/>
+  </g>
+  <circle cx="186" cy="50" r="3" fill="#cfe0ff"/>
+  <circle cx="186" cy="134" r="2.4" fill="#6f7b88"/>
+</svg>`;
+---
+
+<section class="section statement" id="about">
+  <div class="wrap">
+    <div class="statement-panel glass reveal">
+      <div class="statement-copy">
+        <div class="eyebrow" data-i18n="statement_eyebrow">Beyond the screen</div>
+        <h2 class="heading" data-i18n="statement_title">Software is only part of the system.</h2>
+        <p class="lead" data-i18n="statement_desc">
+          The best solution is more than an interface. It is the software, the infrastructure, the
+          devices and the decisions that make everything work together.
+        </p>
+        <a class="link-arrow" href="#contact">
+          <span data-i18n="statement_link">Bring us the whole problem</span><span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <div class="rack-visual" role="img" aria-label="Illustration of a precision server rack" data-i18n-aria="rack_aria">
+        <Fragment set:html={rackSvg} />
+        <div class="rack-cap"><span>Infrastructure / 04U</span><span>Ready to connect</span></div>
+      </div>
+    </div>
+  </div>
+</section>

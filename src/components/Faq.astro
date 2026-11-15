@@ -1,0 +1,49 @@
+---
+const faqs = [
+  {
+    key: 1,
+    q: 'Do you only build new software?',
+    a: 'No. We also modernize existing systems, maintain critical software, and handle the hardware and infrastructure around it. Many engagements can start with improving something that already exists.',
+  },
+  {
+    key: 2,
+    q: 'Can you work alongside our existing team?',
+    a: 'Yes. We can take full ownership of a system or work within your team — reviewing architecture, building specific parts, or helping unblock what is stuck.',
+  },
+  {
+    key: 3,
+    q: 'Do you handle hardware as well as software?',
+    a: 'When a project needs it, we source, configure and connect servers, devices and networking so the software and the physical setup work as one system.',
+  },
+  {
+    key: 4,
+    q: 'What happens after the first conversation?',
+    a: 'We summarize the problem, outline a practical approach and agree on scope before any commitment. If we are not the right fit, we will say so early.',
+  },
+];
+---
+
+<section class="section faq" id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-id">
+        <span class="num">05</span><span data-i18n="faq_index">Questions</span>
+      </div>
+      <h2 class="heading" data-i18n="faq_title">Asked before we begin.</h2>
+      <p class="lead" data-i18n="faq_intro">
+        A few things people usually want to know before the first conversation.
+      </p>
+    </div>
+
+    <div class="faq-panel glass reveal">
+      {faqs.map((faq) => (
+        <details class="faq-item" name="faq">
+          <summary>
+            <span data-i18n={`faq${faq.key}_q`}>{faq.q}</span><span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <p class="faq-a" data-i18n={`faq${faq.key}_a`}>{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

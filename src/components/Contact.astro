@@ -1,0 +1,99 @@
+---
+// Form behaviour is configured once in src/config.ts and passed to the client
+// through window.__SIFR_CONFIG__ (set by the page), not duplicated here.
+const options = [
+  { value: 'software', key: 'form_opt1', label: 'Build new software' },
+  { value: 'modernize', key: 'form_opt2', label: 'Improve an existing system' },
+  { value: 'maintenance', key: 'form_opt3', label: 'Maintenance & support' },
+  { value: 'hardware', key: 'form_opt4', label: 'Hardware & infrastructure' },
+  { value: 'consulting', key: 'form_opt5', label: 'Technical consulting' },
+];
+---
+
+<section class="section contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-copy reveal">
+      <div class="sec-id">
+        <span class="num">06</span><span data-i18n="contact_index">Start here</span>
+      </div>
+      <h2 class="heading" data-i18n="contact_title">Let’s make the complicated feel simple.</h2>
+      <p class="lead" data-i18n="contact_desc">
+        Tell us what you want to build, what is not working, or what your systems need next. We’ll
+        start with a conversation.
+      </p>
+      <div class="contact-meta">
+        <span data-i18n="contact_meta1">New systems</span>
+        <span data-i18n="contact_meta2">Existing systems</span>
+        <span data-i18n="contact_meta3">Hardware</span>
+      </div>
+    </div>
+
+    <form class="inquiry glass reveal delay-1" id="inquiryForm" novalidate>
+      <div class="hp" aria-hidden="true">
+        <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="name" data-i18n="form_name">Your name</label>
+          <input
+            id="name"
+            name="name"
+            autocomplete="name"
+            maxlength="120"
+            placeholder="Name"
+            data-i18n-placeholder="form_name_ph"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="email" data-i18n="form_email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            maxlength="160"
+            placeholder="you@example.com"
+            required
+          />
+        </div>
+
+        <div class="field full">
+          <label for="type" data-i18n="form_type">What do you need help with?</label>
+          <select id="type" name="type" required>
+            <option value="" data-i18n="form_choose">Choose a starting point</option>
+            {options.map((opt) => <option value={opt.value} data-i18n={opt.key}>{opt.label}</option>)}
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="message" data-i18n="form_message">A little about the project</label>
+          <textarea
+            id="message"
+            name="message"
+            maxlength="4000"
+            placeholder="What are you trying to solve?"
+            data-i18n-placeholder="form_message_ph"
+            required
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-bottom">
+        <span class="form-hint" data-i18n="form_hint">No pressure. Just a first conversation.</span>
+        <button class="btn btn-solid" type="submit">
+          <span data-i18n="form_submit">Prepare inquiry</span><span class="arr" aria-hidden="true">↗</span>
+        </button>
+      </div>
+
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      <noscript>
+        <p class="form-status error">
+          This form needs JavaScript. Please enable it to prepare an inquiry.
+        </p>
+      </noscript>
+    </form>
+  </div>
+</section>

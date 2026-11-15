@@ -1,0 +1,60 @@
+---
+interface Props {
+  lang: 'en' | 'ar';
+}
+
+const { lang } = Astro.props;
+const homeLabel = lang === 'ar' ? 'sifr — الصفحة الرئيسية' : 'sifr home';
+---
+
+<header class="header" id="header" data-site-header>
+  <div class="wrap">
+    <div class="nav glass">
+      <a href="#top" class="wordmark" aria-label={homeLabel}>
+        <span class="mark" aria-hidden="true"></span><span>sifr</span>
+      </a>
+
+      <nav aria-label="Primary navigation" data-i18n-aria="nav_aria">
+        <ul class="nav-links">
+          <li><a href="#capabilities" data-i18n="nav_services">Capabilities</a></li>
+          <li><a href="#approach" data-i18n="nav_approach">Approach</a></li>
+          <li><a href="#work" data-i18n="nav_work">Work</a></li>
+          <li><a href="#faq" data-i18n="nav_faq">FAQ</a></li>
+          <li><a href="#about" data-i18n="nav_about">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="lang-btn" type="button" data-lang>العربية</button>
+        <a class="nav-cta" href="#contact" data-i18n="nav_cta">Let’s talk</a>
+        <button
+          class="menu-btn"
+          type="button"
+          id="menuBtn"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobilePanel"
+          data-i18n-aria="menu_open"
+        >
+          <span class="menu-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <nav
+      class="mobile-panel glass"
+      id="mobilePanel"
+      aria-label="Mobile navigation"
+      data-i18n-aria="mobile_aria"
+    >
+      <a href="#capabilities" data-i18n="nav_services">Capabilities</a>
+      <a href="#approach" data-i18n="nav_approach">Approach</a>
+      <a href="#work" data-i18n="nav_work">Work</a>
+      <a href="#faq" data-i18n="nav_faq">FAQ</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#contact" data-i18n="nav_cta">Let’s talk</a>
+    </nav>
+  </div>
+</header>
+
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>

@@ -1,0 +1,71 @@
+---
+interface Capability {
+  num: string;
+  key: string;
+  title: string;
+  desc: string;
+  delay?: string;
+}
+
+const capabilities: Capability[] = [
+  {
+    num: '01',
+    key: 'software',
+    title: 'Software, made for the way you work.',
+    desc: 'Custom applications, business systems, backend platforms and integrations — designed around your actual operation, not a template.',
+  },
+  {
+    num: '02',
+    key: 'legacy',
+    title: 'Legacy modernization',
+    desc: 'Make existing systems faster, safer and easier to evolve.',
+    delay: 'delay-1',
+  },
+  {
+    num: '03',
+    key: 'maintenance',
+    title: 'Maintenance & support',
+    desc: 'Keep critical software reliable with ongoing technical care.',
+    delay: 'delay-1',
+  },
+  {
+    num: '04',
+    key: 'hardware',
+    title: 'Hardware & infrastructure',
+    desc: 'Source, configure and connect the equipment your systems need.',
+    delay: 'delay-2',
+  },
+];
+---
+
+<section class="section capabilities" id="capabilities">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-id">
+        <span class="num">01</span><span data-i18n="cap_index">Capabilities</span>
+      </div>
+      <h2 class="heading" data-i18n="cap_title">One team. The whole system.</h2>
+      <p class="lead" data-i18n="cap_intro">
+        From the first line of code to the hardware beneath it, we bring the pieces together with
+        care.
+      </p>
+    </div>
+
+    <div class="cap-grid">
+      {capabilities.map((cap) => (
+        <article class={`cap-card glass reveal ${cap.delay ?? ''}`.trim()}>
+          <div class="cap-top">
+            <span class="cap-num">{cap.num}</span>
+            <span class="cap-arrow" aria-hidden="true">↗</span>
+          </div>
+          <h3 data-i18n={`cap_${cap.key}`}>{cap.title}</h3>
+          <p data-i18n={`cap_${cap.key}_desc`}>{cap.desc}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="cap-foot">
+      <span data-i18n="cap_software_foot">From concept to production</span><span aria-hidden="true">↗</span>
+    </div>
+  </div>
+</section>

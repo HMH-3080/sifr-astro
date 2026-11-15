@@ -1,0 +1,49 @@
+---
+import { siteConfig } from '../config';
+import { translations, type Lang } from '../i18n/translations';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Strip from '../components/Strip.astro';
+import Capabilities from '../components/Capabilities.astro';
+import Statement from '../components/Statement.astro';
+import Modernize from '../components/Modernize.astro';
+import Method from '../components/Method.astro';
+import Work from '../components/Work.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+
+// Server-rendered in English. The client script flips lang/dir/text on toggle.
+const lang: Lang = 'en';
+const t = translations[lang];
+---
+
+<BaseLayout title={t.meta_title} description={t.meta_desc} lang={lang}>
+  <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span></div>
+  <a class="skip" href="#top" data-i18n="skip">Skip to content</a>
+
+  <Header lang={lang} />
+
+  <main id="top">
+    <Hero />
+    <Strip label={t.strip_label} items={[t.strip1, t.strip2, t.strip3]} />
+    <Capabilities />
+    <Statement />
+    <Modernize />
+    <Method />
+    <Work />
+    <Faq />
+    <Contact />
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<script is:inline define:vars={{ contactEmail: siteConfig.contactEmail, formEndpoint: siteConfig.formEndpoint }}>
+  window.__SIFR_CONFIG__ = { contactEmail, formEndpoint };
+</script>
+
+<script>
+  import '../scripts/site';
+</script>

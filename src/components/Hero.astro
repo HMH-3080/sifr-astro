@@ -1,0 +1,68 @@
+---
+/**
+ * Hero — copy plus the WebGL orb stage.
+ *
+ * The orb scene is a separate module (src/scripts/orb-scene.ts) loaded with
+ * `client:load` via a small inline bootstrap so the static HTML stays complete.
+ */
+---
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="kicker eyebrow" data-i18n="hero_kicker">Independent engineering studio</div>
+      <h1 class="display">
+        <span class="line" data-i18n="hero_line1">Engineering,</span>
+        <span class="line second" data-i18n="hero_line2">without the noise.</span>
+      </h1>
+      <p class="lead" data-i18n="hero_desc">
+        We design, build and improve the systems behind ambitious ideas — from custom software to
+        the infrastructure it runs on.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-solid">
+          <span data-i18n="hero_cta">Start a conversation</span><span class="arr" aria-hidden="true">↗</span>
+        </a>
+        <a href="#capabilities" class="btn btn-glass">
+          <span data-i18n="hero_more">Explore what we do</span><span class="arr" aria-hidden="true">↓</span>
+        </a>
+      </div>
+      <ul class="hero-meta">
+        <li data-i18n="hero_meta1">Software</li>
+        <li data-i18n="hero_meta2">Systems</li>
+        <li data-i18n="hero_meta3">Infrastructure</li>
+      </ul>
+    </div>
+
+    <div class="hero-art">
+      <div class="orb-stage" id="orbStage">
+        <span class="art-label a" data-i18n="art_label1">SIFR / FORM 001</span>
+        <span class="art-label b" data-i18n="art_label2">A system in balance</span>
+
+        <div class="orb-glow" aria-hidden="true"></div>
+        <div class="orb-fallback" aria-hidden="true">
+          <span class="halo"></span>
+          <span class="halo two"></span>
+        </div>
+
+        <div
+          class="orb"
+          role="img"
+          aria-label="An abstract glass form suspended in orbital rings"
+          data-i18n-aria="orb_aria"
+        >
+        </div>
+
+        <canvas class="orb-canvas" id="orbCanvas" aria-hidden="true"></canvas>
+
+        <div class="orb-ring" aria-hidden="true"></div>
+        <div class="orb-ring two" aria-hidden="true"></div>
+        <span class="orb-dot" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/orb-scene';
+</script>

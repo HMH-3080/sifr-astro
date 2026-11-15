@@ -1,0 +1,56 @@
+---
+const glyphNew = `<svg class="split-glyph" viewBox="0 0 112 112" fill="none" aria-hidden="true">
+  <circle cx="56" cy="56" r="40" stroke="#c6cfd9" stroke-opacity=".45"/>
+  <circle cx="56" cy="56" r="24" stroke="#c6cfd9" stroke-opacity=".6"/>
+  <path d="M56 7v15M56 90v15M7 56h15M90 56h15" stroke="#c6cfd9" stroke-opacity=".55"/>
+  <circle cx="56" cy="56" r="5" fill="#cfe0ff"/>
+</svg>`;
+
+const glyphExisting = `<svg class="split-glyph" viewBox="0 0 112 112" fill="none" aria-hidden="true">
+  <rect x="15" y="15" width="82" height="82" rx="18" stroke="#c6cfd9" stroke-opacity=".5"/>
+  <path d="M34 56h44M56 34v44" stroke="#c6cfd9" stroke-width="1.5"/>
+  <circle cx="56" cy="56" r="28" stroke="#c6cfd9" stroke-opacity=".55" stroke-dasharray="3 5"/>
+  <circle cx="56" cy="56" r="6" fill="#cfe0ff"/>
+</svg>`;
+---
+
+<section class="section modernize">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-id">
+        <span class="num">02</span><span data-i18n="modern_index">Perspective</span>
+      </div>
+      <h2 class="heading" data-i18n="modern_title">Start fresh. Or make what exists better.</h2>
+      <p class="lead" data-i18n="modern_intro">
+        There is no single starting point. We meet your system where it is, then move it where it
+        needs to go.
+      </p>
+    </div>
+
+    <div class="split">
+      <div class="split-card glass reveal">
+        <Fragment set:html={glyphNew} />
+        <div>
+          <span class="mod-label" data-i18n="mod_before_label">A new challenge</span>
+          <h3 data-i18n="mod_before_title">Nothing built yet?</h3>
+          <p data-i18n="mod_before_desc">
+            We can take an idea from requirements and architecture through implementation, deployment
+            and support.
+          </p>
+        </div>
+      </div>
+
+      <div class="split-card glass reveal delay-1">
+        <Fragment set:html={glyphExisting} />
+        <div>
+          <span class="mod-label" data-i18n="mod_after_label">An existing system</span>
+          <h3 data-i18n="mod_after_title">Something needs fixing?</h3>
+          <p data-i18n="mod_after_desc">
+            We assess what is already there, identify what matters, and improve it without
+            rebuilding for the sake of rebuilding.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

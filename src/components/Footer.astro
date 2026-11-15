@@ -1,0 +1,47 @@
+---
+interface Props {
+  lang: 'en' | 'ar';
+}
+
+const { lang } = Astro.props;
+const homeLabel = lang === 'ar' ? 'sifr — الصفحة الرئيسية' : 'sifr home';
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="wordmark" aria-label={homeLabel}>
+          <span class="mark" aria-hidden="true"></span><span>sifr</span>
+        </a>
+        <p data-i18n="footer_desc">
+          Independent engineering for software, systems and the infrastructure behind them.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4 data-i18n="footer_explore">Explore</h4>
+          <a href="#capabilities" data-i18n="nav_services">Capabilities</a>
+          <a href="#approach" data-i18n="nav_approach">Approach</a>
+          <a href="#work" data-i18n="nav_work">Work</a>
+          <a href="#faq" data-i18n="nav_faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_company">Company</h4>
+          <a href="#about" data-i18n="nav_about">About</a>
+          <a href="#contact" data-i18n="footer_contact">Get in touch</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> sifr. <span data-i18n="rights">All rights reserved.</span></span>
+      <span data-i18n="footer_tag">Engineering, without the noise.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Back to top" data-i18n-aria="back_top">
+  <span aria-hidden="true">↑</span>
+</button>

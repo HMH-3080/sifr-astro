@@ -1,0 +1,36 @@
+---
+const steps = [
+  { num: '01', key: 1, title: 'Understand', desc: 'We learn the goal, constraints and context before proposing a solution.' },
+  { num: '02', key: 2, title: 'Architect', desc: 'We choose a practical architecture that fits the problem, budget and long-term needs.' },
+  { num: '03', key: 3, title: 'Build', desc: 'We implement, test and refine the solution with attention to stability and performance.' },
+  { num: '04', key: 4, title: 'Connect', desc: 'We bring software, existing services, hardware and infrastructure together where needed.' },
+  { num: '05', key: 5, title: 'Support', desc: 'We can stay involved to maintain, improve and help the system evolve.' },
+];
+---
+
+<section class="section method" id="approach">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-id">
+        <span class="num">03</span><span data-i18n="method_index">How we work</span>
+      </div>
+      <h2 class="heading" data-i18n="method_title">Clear thinking. Careful execution.</h2>
+      <p class="lead" data-i18n="method_intro">
+        Good engineering is a sequence of thoughtful decisions. We keep the process close,
+        understandable and grounded in the real problem.
+      </p>
+    </div>
+
+    <div class="steps-panel glass reveal">
+      <ol class="steps">
+        {steps.map((step) => (
+          <li class="step">
+            <span class="num">{step.num}</span>
+            <h3 data-i18n={`step${step.key}_title`}>{step.title}</h3>
+            <p data-i18n={`step${step.key}_desc`}>{step.desc}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
