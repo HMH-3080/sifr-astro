@@ -882,6 +882,7 @@ html[dir='rtl'] .btn .arr {
 
 .orb-stage.scene-ready .orb-canvas {
   visibility: visible;
+  opacity: 1;
 }
 
 .orb-stage.no-webgl .orb-canvas {
