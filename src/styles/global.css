@@ -511,6 +511,83 @@ html[dir='rtl'] .progress span {
   border-color: var(--line-2);
 }
 
+.sound-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 68px;
+  height: 36px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--ink-2);
+  font: 400 10px/1 var(--mono);
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    border-color 0.25s,
+    color 0.25s;
+}
+
+.sound-btn:hover,
+.sound-btn.is-on {
+  background: rgba(157, 190, 239, 0.1);
+  border-color: rgba(177, 205, 247, 0.38);
+  color: var(--ink);
+}
+
+.sound-btn.needs-gesture {
+  border-color: rgba(177, 205, 247, 0.34);
+}
+
+.sound-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sound-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+
+.sound-icon i {
+  display: block;
+  width: 2px;
+  height: 5px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+  transition: height 0.2s var(--ease), opacity 0.2s;
+}
+
+.sound-icon i:nth-child(2) {
+  height: 9px;
+}
+
+.sound-btn.is-on .sound-icon i {
+  height: 8px;
+  opacity: 1;
+  animation: sound-wave 0.85s ease-in-out infinite alternate;
+}
+
+.sound-btn.is-on .sound-icon i:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.sound-btn.is-on .sound-icon i:nth-child(3) {
+  animation-delay: 0.34s;
+}
+
+@keyframes sound-wave {
+  to {
+    height: 3px;
+  }
+}
+
 html[lang='ar'] .lang-btn {
   font-family: var(--arabic);
   letter-spacing: 0;
@@ -1920,6 +1997,15 @@ html[dir='rtl'] .field select {
     display: inline-flex;
     width: 42px;
     height: 42px;
+  }
+  .sound-btn {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    padding: 0;
+  }
+  .sound-btn [data-sound-state] {
+    display: none;
   }
   .lang-btn {
     height: 42px;

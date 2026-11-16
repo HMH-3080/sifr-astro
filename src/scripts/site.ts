@@ -1,4 +1,5 @@
 import { translations, type Lang } from '../i18n/translations';
+import './audio';
 
 type Dict = (typeof translations)['en'];
 type DictKey = keyof Dict;
@@ -83,6 +84,8 @@ function setLanguage(next: Lang) {
   } catch {
     /* storage unavailable */
   }
+
+  window.dispatchEvent(new Event('sifr:languagechange'));
 }
 
 $$<HTMLButtonElement>('[data-lang]').forEach((btn) =>

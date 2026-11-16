@@ -26,6 +26,17 @@ const homeLabel = lang === 'ar' ? 'sifr — الصفحة الرئيسية' : 'si
 
       <div class="nav-actions">
         <button class="lang-btn" type="button" data-lang>العربية</button>
+        <button
+          class="sound-btn"
+          type="button"
+          id="soundToggle"
+          aria-label="Ambient sound"
+          aria-pressed="false"
+          data-i18n-aria="sound_toggle"
+        >
+          <span class="sound-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span data-sound-state data-i18n="sound_off">Off</span>
+        </button>
         <a class="nav-cta" href="#contact" data-i18n="nav_cta">Let’s talk</a>
         <button
           class="menu-btn"
