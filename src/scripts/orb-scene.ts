@@ -1,16 +1,14 @@
 /**
- * Hero orb scene — enhanced WebGL centrepiece.
+ * Hero zero scene — a machined metallic zero with animated technical details.
  *
  * Layers, from back to front:
- *   1. Soft core glow + a slowly counter-rotating particle field (the "system")
- *   2. A glass torus with iridescence and a refractive-ish physical material
- *   3. Two inclined orbital rings with satellites that ride the rings
- *   4. A wireframe icosahedron core that breathes and counter-rotates
- *   5. A cursor-following light that sweeps across the glass
+ *   1. A sculpted zero with luminous machined edge details
+ *   2. Rotating scan arcs, calibration marks and a sparse particle field
+ *   3. A fast assembly reveal followed by controlled, continuous motion
  *
  * Design goals:
- *   - Meaningful motion: rotation, breathing, satellites and a pointer-driven
- *     parallax, so the scene reads as an engineered object rather than a spinner.
+ *   - A striking, unmistakable zero with a precise engineering finish.
+ *   - Rich motion that stays legible and respects reduced-motion preferences.
  *   - Graceful degradation: falls back to the CSS orb when WebGL, reduced
  *     motion, save-data or low memory conditions apply.
  *   - Cheap to run: lazy boot, render loop paused when off-screen or when the
@@ -24,7 +22,8 @@ type Stage = HTMLElement & { dataset: DOMStringMap };
 const stage = document.getElementById('orbStage') as Stage | null;
 const canvas = document.getElementById('orbCanvas') as HTMLCanvasElement | null;
 
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+let reduceMotion = motionQuery.matches;
 
 type NetworkInformationLike = { saveData?: boolean };
 const connection = (navigator as Navigator & { connection?: NetworkInformationLike }).connection;
@@ -40,11 +39,8 @@ async function boot() {
   booted = true;
 
   let THREE: typeof import('three');
-  let RoomEnvironment: new () => import('three').Scene;
-
   try {
     THREE = await import('three');
-    ({ RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js'));
   } catch {
     stage.classList.add('no-webgl');
     return;
@@ -73,161 +69,175 @@ async function boot() {
   renderer.toneMappingExposure = 0.92;
   renderer.setClearColor(0x000000, 0);
 
+  let RoomEnvironment: new () => import('three').Scene;
+  try {
+    ({ RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js'));
+  } catch {
+    renderer.dispose();
+    stage.classList.add('no-webgl');
+    return;
+  }
+
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0.08, 4.9);
+  camera.position.set(0, 0.08, 4.45);
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.72;
+  scene.environmentIntensity = 0.8;
   pmrem.dispose();
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+  scene.add(new THREE.AmbientLight(0x9eb8dc, 0.72));
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.3);
-  key.position.set(3.2, 4, 4.4);
-  scene.add(key);
+  const keyLight = new THREE.DirectionalLight(0xf4f7ff, 3.2);
+  keyLight.position.set(-3.5, 4.5, 4);
+  scene.add(keyLight);
 
-  const rim = new THREE.PointLight(0x9dc0ff, 11, 16);
-  rim.position.set(-3.4, 1.4, -2.6);
-  scene.add(rim);
+  const blueLight = new THREE.PointLight(0x5b9cff, 24, 8, 2);
+  blueLight.position.set(2.6, 0.8, 1.4);
+  scene.add(blueLight);
 
-  const warm = new THREE.PointLight(0xffd7a3, 5, 14);
-  warm.position.set(2.6, -2.4, 2.4);
-  scene.add(warm);
+  const warmLight = new THREE.PointLight(0xf0b978, 12, 7, 2);
+  warmLight.position.set(-2.8, -1.7, 1.1);
+  scene.add(warmLight);
 
-  // Cursor-following light: makes the glass feel lit by the viewer.
-  const cursorLight = new THREE.PointLight(0xdfeaff, 0, 9, 2);
-  cursorLight.position.set(0, 0, 2.4);
-  scene.add(cursorLight);
+  const pointerLight = new THREE.PointLight(0x9fc8ff, 0, 5, 2);
+  scene.add(pointerLight);
 
   const root = new THREE.Group();
   scene.add(root);
 
-  /* ---------- Glass torus ---------- */
-  const glass = new THREE.MeshPhysicalMaterial({
-    color: 0xc6d5ef,
-    metalness: 0.16,
-    roughness: 0.1,
-    clearcoat: 0.85,
-    clearcoatRoughness: 0.1,
-    iridescence: 0.75,
-    iridescenceIOR: 1.28,
-    iridescenceThicknessRange: [160, 480],
-    envMapIntensity: 0.9,
-    transparent: true,
-    opacity: 0.9,
+  /* ---------- Sculpted zero ---------- */
+  const zeroGroup = new THREE.Group();
+  zeroGroup.rotation.set(-0.26, 0.2, -0.08);
+
+  const bodyMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xb5c4d9,
+    metalness: 0.76,
+    roughness: 0.17,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    emissive: 0x142440,
+    emissiveIntensity: 0.42,
   });
+  const zeroBody = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.23, 48, 192), bodyMaterial);
+  zeroGroup.add(zeroBody);
 
-  const torusGroup = new THREE.Group();
-  const torus = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.22, 48, 192), glass);
-  torus.rotation.set(-0.3, 0.34, 0.22);
-  torusGroup.add(torus);
-  root.add(torusGroup);
-
-  /* ---------- Core ---------- */
-  const core = new THREE.Group();
-  core.add(
-    new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.32, 1),
-      new THREE.MeshStandardMaterial({
-        color: 0x0d1420,
-        metalness: 0.85,
-        roughness: 0.25,
-        emissive: 0x27436b,
-        emissiveIntensity: 0.55,
-      }),
-    ),
-  );
-  const coreWire = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.36, 1),
+  const wireOverlay = new THREE.Mesh(
+    new THREE.TorusGeometry(0.72, 0.232, 24, 96),
     new THREE.MeshBasicMaterial({
-      color: 0xcfe0ff,
+      color: 0xd6e6ff,
       wireframe: true,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.035,
     }),
   );
-  core.add(coreWire);
-  root.add(core);
+  zeroGroup.add(wireOverlay);
 
-  /* ---------- Orbital rings + satellites ---------- */
-  const ringMaterial = new THREE.MeshBasicMaterial({
-    color: 0xcfe0ff,
+  const trimMaterial = new THREE.MeshBasicMaterial({
+    color: 0xa9c9fa,
     transparent: true,
-    opacity: 0.22,
+    opacity: 0.78,
+  });
+  const outerTrim = new THREE.Mesh(new THREE.TorusGeometry(0.94, 0.009, 8, 192), trimMaterial);
+  const innerTrim = new THREE.Mesh(
+    new THREE.TorusGeometry(0.5, 0.006, 8, 192),
+    new THREE.MeshBasicMaterial({ color: 0x759bd0, transparent: true, opacity: 0.5 }),
+  );
+  zeroGroup.add(outerTrim, innerTrim);
+  root.add(zeroGroup);
+
+  /* ---------- Precision marks ---------- */
+  const tickPoints: import('three').Vector3[] = [];
+  const tickCount = 96;
+  for (let i = 0; i < tickCount; i += 1) {
+    const angle = (i / tickCount) * Math.PI * 2;
+    const outerRadius = 1.16;
+    const innerRadius = outerRadius - (i % 12 === 0 ? 0.1 : i % 4 === 0 ? 0.06 : 0.03);
+    tickPoints.push(
+      new THREE.Vector3(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius, 0),
+      new THREE.Vector3(Math.cos(angle) * outerRadius, Math.sin(angle) * outerRadius, 0),
+    );
+  }
+  const ticks = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(tickPoints),
+    new THREE.LineBasicMaterial({ color: 0xa9c5eb, transparent: true, opacity: 0.45 }),
+  );
+  root.add(ticks);
+
+  const scanArcs = [0, 1, 2].map((index) => {
+    const arcGroup = new THREE.Group();
+    const radius = 1.12 + index * 0.08;
+    const arc = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, index === 1 ? 0.009 : 0.0045, 8, 120, Math.PI * (0.32 + index * 0.08)),
+      new THREE.MeshBasicMaterial({
+        color: index === 1 ? 0xd6e6ff : index === 2 ? 0xd9b78c : 0x6d9ce0,
+        transparent: true,
+        opacity: index === 1 ? 0.9 : 0.58,
+      }),
+    );
+    arc.rotation.z = index * 2.1;
+    arcGroup.rotation.set(index * 0.46, index * 0.31, 0);
+    arcGroup.add(arc);
+    root.add(arcGroup);
+    return arcGroup;
   });
 
-  const orbitA = new THREE.Mesh(new THREE.TorusGeometry(1.86, 0.005, 6, 220), ringMaterial);
-  orbitA.rotation.set(1.15, 0.2, 0.35);
-  root.add(orbitA);
-
-  const orbitB = new THREE.Mesh(
-    new THREE.TorusGeometry(2.16, 0.004, 6, 220),
-    ringMaterial.clone(),
-  );
-  (orbitB.material as import('three').MeshBasicMaterial).opacity = 0.1;
-  orbitB.rotation.set(1.35, -0.4, -0.2);
-  root.add(orbitB);
-
-  /* Satellites: one per ring. Each lives in the ring's own rotated frame and
-     orbits along its local Z axis, so it visually rides the ring ellipse. */
-  const makeSatellite = (radius: number, size: number, color: number) => {
-    const pivot = new THREE.Group();
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(size, 16, 16),
-      new THREE.MeshBasicMaterial({ color }),
-    );
-    mesh.position.set(radius, 0, 0);
-    pivot.add(mesh);
-    return pivot;
-  };
-
-  const satelliteA = makeSatellite(1.86, 0.038, 0xffffff);
-  satelliteA.rotation.copy(orbitA.rotation);
-  root.add(satelliteA);
-
-  const satelliteB = makeSatellite(2.16, 0.028, 0xcfe0ff);
-  satelliteB.rotation.copy(orbitB.rotation);
-  root.add(satelliteB);
-
-  /* ---------- Particle field ---------- */
-  const particleCount = small ? 96 : 180;
-  const positions = new Float32Array(particleCount * 3);
+  const particleCount = small ? 90 : 150;
+  const particlePositions = new Float32Array(particleCount * 3);
+  const particleAngles = new Float32Array(particleCount);
+  const particleRadii = new Float32Array(particleCount);
   for (let i = 0; i < particleCount; i += 1) {
-    const radius = 1.85 + Math.random() * 1.15;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-    positions[i * 3 + 1] = radius * Math.cos(phi) * 0.78;
-    positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+    particleAngles[i] = Math.random() * Math.PI * 2;
+    particleRadii[i] = 1.26 + Math.random() * 0.55;
+    particlePositions[i * 3] = Math.cos(particleAngles[i]) * particleRadii[i];
+    particlePositions[i * 3 + 1] = Math.sin(particleAngles[i]) * particleRadii[i];
+    particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 0.48;
   }
   const particleGeometry = new THREE.BufferGeometry();
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
   const particles = new THREE.Points(
     particleGeometry,
     new THREE.PointsMaterial({
-      color: 0xcfe0ff,
-      size: 0.022,
+      color: 0xc5d9f7,
+      size: small ? 0.022 : 0.018,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.72,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      sizeAttenuation: true,
     }),
   );
   root.add(particles);
 
+  const centerMark = new THREE.Mesh(
+    new THREE.SphereGeometry(0.018, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xe7efff }),
+  );
+  root.add(centerMark);
+
   /* ---------- Pointer parallax ---------- */
-  const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+  const pointer = {
+    x: 0,
+    y: 0,
+    targetX: 0,
+    targetY: 0,
+    strength: 0,
+    targetStrength: 0,
+  };
 
   window.addEventListener(
     'pointermove',
     (event) => {
       if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
       const rect = stage!.getBoundingClientRect();
-      pointer.targetX = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1));
-      pointer.targetY = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1));
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+      pointer.targetX = Math.max(-1, Math.min(1, x));
+      pointer.targetY = Math.max(-1, Math.min(1, y));
+
+      const distance = Math.hypot(x, y);
+      const proximity = Math.max(0, Math.min(1, (1.18 - distance) / 0.72));
+      pointer.targetStrength = proximity * proximity * (3 - 2 * proximity);
     },
     { passive: true },
   );
@@ -235,6 +245,7 @@ async function boot() {
   stage.addEventListener('pointerleave', () => {
     pointer.targetX = 0;
     pointer.targetY = 0;
+    pointer.targetStrength = 0;
   }, { passive: true });
 
   /* ---------- Resize ---------- */
@@ -253,9 +264,8 @@ async function boot() {
 
   /* ---------- Intro flourish: assemble on first paint ---------- */
   const introStart = performance.now();
-  const INTRO_MS = reduceMotion ? 0 : 1400;
-  torusGroup.scale.setScalar(0.001);
-  core.scale.setScalar(0.001);
+  const INTRO_MS = reduceMotion ? 0 : 1900;
+  zeroGroup.scale.setScalar(0.001);
 
   /* ---------- Render loop ---------- */
   let frame = 0;
@@ -263,7 +273,12 @@ async function boot() {
   let last = 0;
   let slowFrames = 0;
 
-  const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+  const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+  const easeOutBack = (t: number) => {
+    const c1 = 1.35;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  };
 
   const renderFrame = (now: number) => {
     frame = requestAnimationFrame(renderFrame);
@@ -281,55 +296,50 @@ async function boot() {
       slowFrames = 0;
     }
 
-    // Intro: glass assembles, core catches up slightly later.
+    // Intro: the blueprint resolves from its origin.
     if (INTRO_MS) {
       const t = Math.min(1, (now - introStart) / INTRO_MS);
-      const e = easeOut(t);
-      torusGroup.scale.setScalar(0.001 + e * 0.999);
-      torusGroup.rotation.y = (1 - e) * -0.9;
-      const tc = Math.min(1, Math.max(0, (now - introStart - 220) / INTRO_MS));
-      const ec = easeOut(tc);
-      core.scale.setScalar(0.001 + ec * 0.999);
+      const e = easeOutBack(t);
+      zeroGroup.scale.setScalar(0.001 + e * 0.999);
+      zeroGroup.rotation.y = 0.2 + (1 - easeOut(t)) * Math.PI * 1.8;
+      zeroGroup.rotation.x = -0.26 + (1 - easeOut(t)) * 1.15;
     } else {
-      torusGroup.scale.setScalar(1);
-      core.scale.setScalar(1);
+      zeroGroup.scale.setScalar(1);
     }
 
     // Pointer easing + parallax.
     pointer.x += (pointer.targetX - pointer.x) * 0.045;
     pointer.y += (pointer.targetY - pointer.y) * 0.045;
+    pointer.strength += (pointer.targetStrength - pointer.strength) * 0.075;
 
-    root.rotation.y = elapsed * 0.12 + pointer.x * 0.35;
-    root.rotation.x = Math.sin(elapsed * 0.24) * 0.06 + pointer.y * 0.2;
-    root.position.y = Math.sin(elapsed * 0.5) * 0.04;
+    const introComplete = Math.min(1, (now - introStart) / INTRO_MS);
+    const motion = reduceMotion ? 0 : easeOut(introComplete);
+    zeroGroup.rotation.y += delta * (0.46 + motion * 0.18);
+    zeroGroup.rotation.z = -0.08 + Math.sin(elapsed * 0.65) * 0.035;
+    root.rotation.y =
+      Math.sin(elapsed * 0.42) * 0.035 + pointer.x * pointer.strength * 0.2;
+    root.rotation.x =
+      Math.sin(elapsed * 0.58) * 0.025 + pointer.y * pointer.strength * 0.14;
+    root.position.x = pointer.x * pointer.strength * 0.045;
+    root.position.y = Math.sin(elapsed * 1.1) * 0.025 - pointer.y * pointer.strength * 0.035;
+    root.scale.setScalar(1 + pointer.strength * 0.025);
 
-    // Glass torus slow wobble.
-    torus.rotation.z = 0.18 + Math.sin(elapsed * 0.3) * 0.05;
+    pointerLight.position.set(pointer.x * 1.7, -pointer.y * 1.7, 1.25);
+    pointerLight.intensity = pointer.strength * 16;
 
-    // Core breathing and counter-rotation.
-    core.rotation.y = -elapsed * 0.35;
-    core.rotation.x = elapsed * 0.22;
-    const coreTarget = 1 + Math.sin(elapsed * 0.8) * 0.04;
-    core.scale.setScalar(core.scale.x + (coreTarget - core.scale.x) * 0.1);
-    coreWire.rotation.y = elapsed * 0.5;
-
-    // Satellites ride their rings.
-    satelliteA.rotation.z = elapsed * 0.55;
-    satelliteB.rotation.z = -elapsed * 0.34;
-
-    // Particle drift.
-    particles.rotation.y = -elapsed * 0.02;
-
-    // Cursor light: sits between camera and scene, follows the pointer.
-    cursorLight.position.x += (pointer.x * 2.6 - cursorLight.position.x) * 0.06;
-    cursorLight.position.y += (-pointer.y * 1.8 - cursorLight.position.y) * 0.06;
-    cursorLight.intensity = 3.2 + Math.sin(elapsed * 1.2) * 0.4;
+    scanArcs[0].rotation.z = elapsed * (1.05 + pointer.strength * 0.75);
+    scanArcs[1].rotation.z = -elapsed * (0.76 + pointer.strength * 0.58);
+    scanArcs[2].rotation.z = elapsed * (0.52 + pointer.strength * 0.42);
+    particles.rotation.z = -elapsed * (0.2 + pointer.strength * 0.4);
+    bodyMaterial.emissiveIntensity =
+      0.48 + Math.sin(elapsed * 2.8) * 0.16 + pointer.strength * 0.28;
+    blueLight.intensity = 22 + Math.sin(elapsed * 2.2) * 5;
 
     renderer.render(scene, camera);
   };
 
   const start = () => {
-    if (frame) return;
+    if (frame || reduceMotion || document.hidden) return;
     last = 0;
     frame = requestAnimationFrame(renderFrame);
   };
@@ -338,6 +348,29 @@ async function boot() {
     cancelAnimationFrame(frame);
     frame = 0;
   };
+
+  motionQuery.addEventListener('change', (event) => {
+    reduceMotion = event.matches;
+    if (reduceMotion) {
+      zeroGroup.scale.setScalar(1);
+      zeroGroup.rotation.set(-0.26, 0.2, -0.08);
+      root.rotation.set(0, 0, 0);
+      root.position.set(0, 0, 0);
+      root.scale.setScalar(1);
+      scanArcs.forEach((arc, index) => {
+        arc.rotation.z = index * 2.1;
+      });
+      particles.rotation.z = 0;
+      bodyMaterial.emissiveIntensity = 0.42;
+      pointerLight.intensity = 0;
+      pointer.strength = 0;
+      pointer.targetStrength = 0;
+      renderer.render(scene, camera);
+      stop();
+    } else {
+      start();
+    }
+  });
 
   renderer.render(scene, camera);
   stage.classList.add('scene-ready');
@@ -353,7 +386,7 @@ async function boot() {
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop();
+      if (document.hidden || reduceMotion) stop();
     else start();
   });
 
@@ -372,23 +405,33 @@ async function boot() {
 }
 
 /* Lazy, conditional boot: never pay for WebGL unless it will be seen and wanted. */
-if (stage && canvas && !reduceMotion && !saveData && !lowMemory) {
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          io.disconnect();
-          boot();
-        }
-      },
-      { rootMargin: '320px 0px' },
-    );
-    io.observe(stage);
-  } else if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(boot, { timeout: 2500 });
-  } else {
-    setTimeout(boot, 800);
-  }
+if (stage && canvas && !saveData && !lowMemory) {
+  const watchForVisibility = () => {
+    if (reduceMotion) return;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            io.disconnect();
+            boot();
+          }
+        },
+        { rootMargin: '320px 0px' },
+      );
+      io.observe(stage);
+    } else if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(boot, { timeout: 2500 });
+    } else {
+      setTimeout(boot, 800);
+    }
+  };
+
+  motionQuery.addEventListener('change', (event) => {
+    reduceMotion = event.matches;
+    if (!reduceMotion) watchForVisibility();
+  });
+
+  watchForVisibility();
 }
 
 export { THREE_VERSION };
