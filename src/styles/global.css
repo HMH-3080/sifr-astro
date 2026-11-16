@@ -1792,6 +1792,27 @@ html[dir='rtl'] .field select {
   transition: color 0.2s;
 }
 
+.footer-col .social-demo-note {
+  max-width: 24ch;
+  margin: 0 0 8px;
+  color: var(--faint);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.footer-social a {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 5px 14px;
+  min-width: 210px;
+}
+
+.social-handle {
+  color: var(--faint);
+  font: 400 10px/1.5 var(--mono);
+}
+
 .footer-col a:hover {
   color: var(--ink);
 }
@@ -2205,6 +2226,12 @@ html[dir='rtl'] .field select {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
+  }
+  .footer-social {
+    grid-column: 1 / -1;
+  }
+  .footer-social a {
+    min-width: 0;
   }
 }
 
