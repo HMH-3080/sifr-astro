@@ -79,12 +79,12 @@ async function boot() {
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.9;
+  scene.environmentIntensity = 0.72;
   pmrem.dispose();
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.6);
+  const key = new THREE.DirectionalLight(0xffffff, 1.3);
   key.position.set(3.2, 4, 4.4);
   scene.add(key);
 
@@ -106,22 +106,22 @@ async function boot() {
 
   /* ---------- Glass torus ---------- */
   const glass = new THREE.MeshPhysicalMaterial({
-    color: 0xd3e2f7,
-    metalness: 0.1,
-    roughness: 0.06,
-    clearcoat: 1,
-    clearcoatRoughness: 0.06,
-    iridescence: 0.6,
+    color: 0xc6d5ef,
+    metalness: 0.16,
+    roughness: 0.1,
+    clearcoat: 0.85,
+    clearcoatRoughness: 0.1,
+    iridescence: 0.75,
     iridescenceIOR: 1.28,
-    iridescenceThicknessRange: [120, 420],
-    envMapIntensity: 1.05,
+    iridescenceThicknessRange: [160, 480],
+    envMapIntensity: 0.9,
     transparent: true,
-    opacity: 0.97,
+    opacity: 0.9,
   });
 
   const torusGroup = new THREE.Group();
-  const torus = new THREE.Mesh(new THREE.TorusGeometry(1.12, 0.29, 40, 160), glass);
-  torus.rotation.set(-0.42, 0.62, 0.18);
+  const torus = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.22, 48, 192), glass);
+  torus.rotation.set(-0.3, 0.34, 0.22);
   torusGroup.add(torus);
   root.add(torusGroup);
 
@@ -192,7 +192,7 @@ async function boot() {
   root.add(satelliteB);
 
   /* ---------- Particle field ---------- */
-  const particleCount = small ? 140 : 260;
+  const particleCount = small ? 96 : 180;
   const positions = new Float32Array(particleCount * 3);
   for (let i = 0; i < particleCount; i += 1) {
     const radius = 1.85 + Math.random() * 1.15;

@@ -773,7 +773,9 @@ html[dir='rtl'] .btn .arr {
   position: absolute;
   inset: 4%;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 45%, rgba(160, 190, 230, 0.3), transparent 62%);
+  background:
+    radial-gradient(circle at 42% 42%, rgba(150, 184, 232, 0.26), transparent 58%),
+    radial-gradient(circle at 72% 68%, rgba(217, 168, 112, 0.11), transparent 48%);
   filter: blur(40px);
 }
 
