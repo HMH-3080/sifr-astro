@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sifr.studio',
+  site: 'https://hmh-3080.github.io',
+  base: '/sifr-astro',
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto',

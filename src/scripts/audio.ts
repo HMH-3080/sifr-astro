@@ -6,7 +6,7 @@ const button = document.querySelector<HTMLButtonElement>('#soundToggle');
 const stateLabel = button?.querySelector<HTMLElement>('[data-sound-state]');
 
 if (button && stateLabel) {
-  const music = new Audio('/audio/sifr-ambient.mp3');
+  const music = new Audio(`${import.meta.env.BASE_URL}/audio/sifr-ambient.mp3`);
   music.loop = true;
   music.preload = 'none';
   music.volume = 0;
