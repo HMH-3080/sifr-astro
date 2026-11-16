@@ -1443,6 +1443,29 @@ html[dir='rtl'] .link-arrow span[aria-hidden] {
   padding: 20px 22px 24px;
 }
 
+.work-labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.work-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 0 8px;
+  border: 1px solid rgba(207, 224, 255, 0.26);
+  border-radius: 999px;
+  background: rgba(157, 190, 239, 0.08);
+  color: #d7e5fa;
+  font: 500 9px/1.2 var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .work-type {
   font: 400 9.5px/1 var(--mono);
   letter-spacing: 0.15em;
@@ -1450,12 +1473,19 @@ html[dir='rtl'] .link-arrow span[aria-hidden] {
   color: var(--faint);
 }
 
+html[lang='ar'] .work-badge,
+html[lang='ar'] .work-type {
+  font-family: var(--arabic);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .work-body h3 {
   font-size: 19px;
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.3;
-  margin: 10px 0 7px;
+  margin: 0 0 7px;
 }
 
 .work-body p {

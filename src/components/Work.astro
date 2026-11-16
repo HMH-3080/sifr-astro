@@ -75,7 +75,10 @@ const work = [
         <article class={`work-card glass reveal ${item.delay}`.trim()}>
           <div class="work-art"><Fragment set:html={item.art} /></div>
           <div class="work-body">
-            <span class="work-type" data-i18n={`work${item.key}_type`}>{item.type}</span>
+            <div class="work-labels">
+              <span class="work-badge" data-i18n="work_badge">Fictional concept</span>
+              <span class="work-type" data-i18n={`work${item.key}_type`}>{item.type}</span>
+            </div>
             <h3 data-i18n={`work${item.key}_title`}>{item.title}</h3>
             <p data-i18n={`work${item.key}_desc`}>{item.desc}</p>
           </div>
